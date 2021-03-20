@@ -1,0 +1,22 @@
+{
+  "name": "crypto-market-js",
+  "version": "0.0.1",
+  "description": "Display information on crypto market",
+  "keywords": "",
+  "license": "",
+  "author": "Yoshaa",
+  "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html --open",
+    "start": "npm run build && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "faker": "^5.4.0",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "nodemon": "^2.0.7"
+  }
+}
