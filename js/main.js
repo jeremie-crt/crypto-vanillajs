@@ -17,14 +17,51 @@ let dataDefaultCrypto = []
   let dataEditedCrypto = dataDefaultCrypto
 }*/
 
-let paragraph = 'Synergistically communicate user friendly action items via high-payoff ideas. Monotonectally architect proactive methods of empowerment without goal-oriented alignments. Rapidiously productize robust convergence with pandemic information. '
+let paragraph = 'Synergistically communicate user friendly action items via high-payoff ideas. Monotonectally architect proactive methods of empowerment without goal-oriented alignments. Rapidiously productize robust convergence with pandemic information. ';
 
 //Loop through the list of crypto
 //Then create object for each
 //Assign data to properties {faker - later API COINMARKET}
 //Save the news data to DefaultCrypto
 
-for (const currency of ['BTC']) {
+//Cookies
+let userCookie = {
+  user: 'name',
+  accepted: false,
+  date: new Date(),
+
+}
+
+/**
+ * SRC= "https://javascript.info/cookie"
+ * @param name
+ * @returns {string|undefined}
+ */
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+let checkCookie = JSON.parse(getCookie('testForUserCookie'))
+
+if(checkCookie !== '' && typeof checkCookie === 'object') {
+
+}
+
+function setCookie(nameC, valueC, expireC) {
+  let date = new Date();
+  date.setTime(date.getTime() + (expireC * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + date.toUTCString();
+  document.cookie = nameC + "=" + valueC + "; " + expires + "; path=/";
+}
+
+setCookie('testForUserCookie', JSON.stringify(userCookie), 1)
+
+
+/****** Defines object Crypto ******/
+
+for (const currency of config.defaultCryptos) {
   let data = new Crypto(currency)
   data.id = currency
   data.name = 'crypto: ' + currency
@@ -71,15 +108,13 @@ for (let i = 0; i < listTrElements.length; i++) {
 //BTN ACTION EVENT
 let modal = document.body.querySelector('.modal-wrapper');
 
-document.body.querySelectorAll('.btn-click-action').forEach(ev => {
-  ev.addEventListener('click', ev => {
+document.body.querySelectorAll('.btn-click-action').forEach(elmt => {
+  elmt.addEventListener('click', ev => {
     ev.preventDefault()
-    let id = ev.target.parentNode.dataset.idCrypto
+    if(ev.target.parentNode.dataset.idCrypto) {
+      modal.dataset.idCrypto = ev.target.parentNode.dataset.idCrypto
+    }
     modal.style.display = 'block'
-    /**
-     * TODO - edit insie modal with btn actions for one crypto  - config in for of 'BTC'
-     *
-     */
   })
 })
 
@@ -91,4 +126,29 @@ window.addEventListener('click', (ev) => {
   if (ev.target === modal) {
     modal.style.display = 'none'
   }
+})
+
+
+//BTN DELETE
+document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) => {
+  if(modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
+    console.log(modal.dataset.idCrypto)
+  }
+})
+
+//BTN ADD TO FAV
+document.body.querySelector('#btn-add-to-fav').addEventListener('click', (ev) => {
+  if(modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
+    console.log(modal.dataset.idCrypto)
+  }
+})
+
+//BTN ADD NEW
+document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
+  elmt.addEventListener('click', (ev) => {
+    ev.preventDefault()
+    if(modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
+      console.log(modal.dataset.idCrypto)
+    }
+  })
 })
