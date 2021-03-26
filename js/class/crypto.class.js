@@ -1,4 +1,4 @@
-export class Crypto {
+export class CryptoModel {
 
   acronym;
   name;

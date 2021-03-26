@@ -4,94 +4,69 @@
 //import faker from 'faker'
 
 //Importation of Class Folder
-import {Crypto} from "./class/crypto.class.js";
-import {Functions as Funct} from "./utils/functions.js";
+import {Crypto as CryptoFnc} from "./utils/crypto.js";
+import {Cookie as CookieoFnc} from "./utils/cookie.js";
+
 import {config} from "./config.crypto.js";
 
 let dataDefaultCrypto = []
-//If default is set, save it to not repeat raw logic
-//If user CTA events - modify editedCrypto
-/*if(dataDefaultCrypto.length < 0) {
 
+
+//If cookie is defined
+//Means that the cookie is accepted by user to keep his save of crypto data
+//Use the editedCryptoTable to edit the list of crypto display
+if(typeof CookieoFnc.getCookie('testForUserCookie') === 'string') {
+
+  let checkCookie = JSON.parse(CookieoFnc.getCookie('testForUserCookie'))
+
+  if(checkCookie !== '' && typeof checkCookie === 'object') {
+    console.log(checkCookie);
+    let userCryptoList = checkCookie.listCrypto
+
+    let generatedData = CryptoFnc.createCryptoData(userCryptoList, returnedData)
+
+    CryptoFnc.construcTableWithData(generatedData)
+  }
+
+  //If cookie is undefined
+  //let the defaultCryptoTable to display the data
+  //If the user accepted the cookie, initiate the data by setting the cookie with the editedData
 } else {
-  let dataEditedCrypto = dataDefaultCrypto
-}*/
 
-let paragraph = 'Synergistically communicate user friendly action items via high-payoff ideas. Monotonectally architect proactive methods of empowerment without goal-oriented alignments. Rapidiously productize robust convergence with pandemic information. ';
+  if(localStorage.getItem('dataCrypto')) {
+    //Get the data save to reuse it in html instead of redoing the logic data
+    let retrievedData = JSON.parse(localStorage.getItem('dataCrypto'));
 
-//Loop through the list of crypto
-//Then create object for each
-//Assign data to properties {faker - later API COINMARKET}
-//Save the news data to DefaultCrypto
+    //Delete the raw data and inject the html from object
+    document.body.querySelector('.main-table').remove()
+    document.body.querySelector('.resume').insertAdjacentHTML('afterend', retrievedData.htmlGenerated)
 
-//Cookies
-let userCookie = {
-  user: 'name',
-  accepted: false,
-  date: new Date(),
+  } else {
 
+    CryptoFnc.createCryptoData(config.defaultCryptos, dataDefaultCrypto)
+    //TODO - DO SOMETHING WITH VALUE SAVED ? DO RETURN ??
+    let generatedData = CryptoFnc.construcTableWithData(dataDefaultCrypto)
+
+    //Save in localstorage to avoid repeat object instanciation
+    let dataToLocalStorage = {
+      generatedData: generatedData ? generatedData : 'empty',
+      htmlGenerated: document.body.querySelector('.main-table').outerHTML
+    }
+
+    localStorage.setItem('dataCrypto', JSON.stringify(dataToLocalStorage))
+  }
 }
 
-/**
- * SRC= "https://javascript.info/cookie"
- * @param name
- * @returns {string|undefined}
- */
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-let checkCookie = JSON.parse(getCookie('testForUserCookie'))
 
-if(checkCookie !== '' && typeof checkCookie === 'object') {
-
-}
-
-function setCookie(nameC, valueC, expireC) {
-  let date = new Date();
-  date.setTime(date.getTime() + (expireC * 24 * 60 * 60 * 1000));
-  const expires = "expires=" + date.toUTCString();
-  document.cookie = nameC + "=" + valueC + "; " + expires + "; path=/";
-}
-
-setCookie('testForUserCookie', JSON.stringify(userCookie), 1)
+//On accepted Cookie
+//Save into cookie the defaultCryptoList
 
 
-/****** Defines object Crypto ******/
 
-for (const currency of config.defaultCryptos) {
-  let data = new Crypto(currency)
-  data.id = currency
-  data.name = 'crypto: ' + currency
-  data.description = paragraph
-  data.website = "https://google.com/" + currency
-  data.currentPrice = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
-  data.last24 = Funct.randomState(parseFloat(Math.random() * (100 - 1 + 1) + 1).toFixed(2));
-  data.last7d = Funct.randomState(parseFloat(Math.random() * (100 - 1 + 1) + 1).toFixed(2));
-  data.marketCap = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
-  data.volume24 = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
 
-  dataDefaultCrypto.push(data)
-}
+
 
 //************* Front Behavior DOM actions - Treat Data *************//
-let table = document.querySelector('.main-table'),
-  tbody = document.createElement('tbody');
-
-dataDefaultCrypto.map((elmt, index) => {
-  let tr = document.createElement('tr')
-
-  Funct.generateTD(tr, elmt.name, elmt.currentPrice, elmt.last24, elmt.last7d, elmt.marketCap, elmt.volume24)
-
-  tr.dataset.idCrypto = elmt.id
-  tr.dataset.indexCrypto = index + 1
-  tbody.append(tr)
-})
-
-table.querySelector('tbody').innerHTML = ''
-table.append(tbody)
 
 //ADD BUTTON AT THE END OF EACH TR
 let listTrElements = document.querySelectorAll('tr[data-id-crypto]')
@@ -104,29 +79,6 @@ for (let i = 0; i < listTrElements.length; i++) {
 
   listTrElements[i].lastElementChild.insertAdjacentElement('afterend', btnToTr)
 }
-
-//BTN ACTION EVENT
-let modal = document.body.querySelector('.modal-wrapper');
-
-document.body.querySelectorAll('.btn-click-action').forEach(elmt => {
-  elmt.addEventListener('click', ev => {
-    ev.preventDefault()
-    if(ev.target.parentNode.dataset.idCrypto) {
-      modal.dataset.idCrypto = ev.target.parentNode.dataset.idCrypto
-    }
-    modal.style.display = 'block'
-  })
-})
-
-document.body.querySelector('.close-modal').addEventListener('click', (e) => {
-  modal.style.display = 'none'
-})
-
-window.addEventListener('click', (ev) => {
-  if (ev.target === modal) {
-    modal.style.display = 'none'
-  }
-})
 
 
 //BTN DELETE
@@ -151,4 +103,8 @@ document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
       console.log(modal.dataset.idCrypto)
     }
   })
+
 })
+
+
+
