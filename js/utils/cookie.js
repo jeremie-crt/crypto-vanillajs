@@ -1,11 +1,5 @@
 export class Cookie {
 
-  elements = {
-    btnDecline : document.body.querySelector('#btn-decline-cookie'),
-    btnAccept : document.body.querySelector('#btn-accept-cookie'),
-    modalCookie : document.body.querySelector('#modal-for-init-cookie'),
-  }
-
   /**
    * @param dataDefaultCrypto
    * @param duration
@@ -19,7 +13,7 @@ export class Cookie {
       listCrypto: [dataDefaultCrypto]
     }
 
-    setCookie('testForUserCookie', JSON.stringify(userCookie), parseInt(duration))
+    this.setCookie('InfoCryptoUsername', JSON.stringify(userCookie), parseInt(duration))
   }
 
   /**
@@ -31,7 +25,8 @@ export class Cookie {
   static setCookie(nameC, valueC, expireC) {
     let date = new Date();
     date.setTime(date.getTime() + (expireC * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + date.toUTCString();
+    let expires = "expires=" + date.toUTCString();
+
     document.cookie = nameC + "=" + valueC + "; " + expires + "; path=/";
   }
 
@@ -47,12 +42,30 @@ export class Cookie {
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
-  static disagreeCookie() {
+  static disagreeCookie(elements) {
+    //Click event on btn decline - hide the man div & display the btn re-pop div
     elements.btnDecline.addEventListener('click', (e) => {
-      e.target
+      elements.modalCookie.classList.add('hidden-cookie')
+      elements.modalRePopCookie.classList.remove('hidden-cookie')
+      elements.modalRePopCookie.style.display = 'block';
+
+      setTimeout(() => {
+          elements.modalCookie.style.display = 'none';
+        },
+        700)
     })
 
+    //Click event on btn re-pop div - hide the re-pop div & display the the man div
+    elements.modalRePopCookie.addEventListener('click', (e) => {
+      elements.modalRePopCookie.classList.add('hidden-cookie')
+      elements.modalCookie.classList.remove('hidden-cookie')
+      elements.modalCookie.style.display = 'block';
 
+      setTimeout(() => {
+          elements.modalRePopCookie.style.display = 'none'
+        },
+        400)
+    })
   }
 
 }
