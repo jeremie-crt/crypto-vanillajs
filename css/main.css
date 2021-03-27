@@ -326,3 +326,106 @@ footer { margin-top: 50px; }
   text-decoration: none;
   border: solid 1px #d3d3d3;
 }
+
+
+/********** MODAL COOKIE **********/
+.modal-cookie {
+  position: fixed;
+  display: none;
+  width: 55%;
+  bottom: 2px;
+  animation-name: slidesup;
+  animation-duration: 2s;
+}
+
+.modal-cookie h2 {
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+
+.modal-content-cookie {
+  width: 95%;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  box-shadow: 6px -4px 6px #b4b4b4;
+}
+
+.modal-content-cookie .content {
+  padding: 10px;
+  max-height: 70vh;
+}
+
+.modal-cookie .row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.modal-cookie .row .action-content {
+  margin-right: 10px;
+}
+
+@keyframes slidesup {
+  from {
+    bottom: -300px; opacity: 0;
+  }
+  to {
+    bottom: 2px; opacity: 1;
+  }
+}
+
+/* Transition on decline */
+.modal-cookie.hidden-cookie {
+  animation-name: slidesdown;
+  animation-duration: 2s;
+}
+
+@keyframes slidesdown {
+  from {
+    bottom: 2px; opacity: 1;
+  }
+  to {
+    bottom: -300px; opacity: 0;
+  }
+}
+
+/* repop cookie */
+.modal-cookie-repop {
+  position: fixed;
+  display: block;
+  width: 6%;
+  left: 30px;
+  bottom: 2px;
+  animation-name: slidesup;
+  animation-duration: 2s;
+}
+
+.modal-cookie-repop h2 {
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+
+.modal-content-cookie-repop {
+  width: 95%;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  box-shadow: 6px -4px 6px #b4b4b4;
+}
+
+.modal-content-cookie-repop .content {
+  padding: 10px;
+  max-height: 70vh;
+}
+
+.modal-cookie-repop .action-content.fa {
+  width: 100%;
+  text-align: right;
+  font-size: smaller;
+}
+
+.modal-cookie-repop img {
+  width: 100%;
+}

@@ -106,5 +106,29 @@ document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
 
 })
 
+document.body.querySelector('#btn-decline-cookie').addEventListener('click', (e) => {
+  let modal = document.body.querySelector('#modal-for-init-cookie')
+  let modalRepop = document.body.querySelector('#modal-for-repop-cookie')
+
+  modal.classList.add('hidden-cookie')
+  setTimeout(() => {
+    modal.style.display = 'none';
+    modalRepop.style.display = 'block'
+  },
+    1500)
+})
+
+document.body.querySelector('#modal-for-repop-cookie').addEventListener('click', (e) => {
+  let modal = document.body.querySelector('#modal-for-init-cookie')
+
+  modal.classList.remove('hidden-cookie')
+
+  setTimeout(() => {
+    //modal.style.display = 'block';
+      document.body.querySelector('#modal-for-repop-cookie').style.display = 'none'
+  },
+    1500)
+})
+
 
 

@@ -1,5 +1,11 @@
 export class Cookie {
 
+  elements = {
+    btnDecline : document.body.querySelector('#btn-decline-cookie'),
+    btnAccept : document.body.querySelector('#btn-accept-cookie'),
+    modalCookie : document.body.querySelector('#modal-for-init-cookie'),
+  }
+
   /**
    * @param dataDefaultCrypto
    * @param duration
@@ -39,6 +45,14 @@ export class Cookie {
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
+  static disagreeCookie() {
+    elements.btnDecline.addEventListener('click', (e) => {
+      e.target
+    })
+
+
   }
 
 }
