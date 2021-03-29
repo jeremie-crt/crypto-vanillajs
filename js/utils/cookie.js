@@ -1,16 +1,16 @@
 export class Cookie {
 
   /**
-   * @param dataDefaultCrypto
+   * @param dataDefaultCryptoList
    * @param duration
    */
-  static saveUserInCookie(dataDefaultCrypto, duration) {
+  static saveUserInCookie(dataDefaultCryptoList, duration) {
     //Cookies
     let userCookie = {
       user: 'username',
-      accepted: false,
+      accepted: true,
       date: new Date(),
-      listCrypto: [dataDefaultCrypto]
+      listCrypto: dataDefaultCryptoList
     }
 
     this.setCookie('InfoCryptoUsername', JSON.stringify(userCookie), parseInt(duration))
@@ -68,4 +68,25 @@ export class Cookie {
     })
   }
 
+  static agreeToCookie(elements) {
+    //Hide Cookie modal
+    elements.modalCookie.style.display = 'none'
+    elements.modalCookie.classList.add('hide-for-set')
+  }
+
+  static isSetCookie() {
+    if (typeof this.getCookie('InfoCryptoUsername') === 'string') {
+      //Get Cookie info
+      let checkCookie = JSON.parse(this.getCookie('InfoCryptoUsername'))
+
+      //Check if cookie has the right type
+      if (checkCookie !== '' && typeof checkCookie === 'object') {
+
+        return checkCookie.listCrypto
+
+      } else {
+        return false
+      }
+    }
+  }
 }

@@ -8,66 +8,70 @@ import {Crypto as CryptoFnc} from "./utils/crypto.js";
 import {Cookie as CookieFnc} from "./utils/cookie.js";
 import {config} from "./config.crypto.js";
 
-let dataDefaultCrypto = []
+let dataDefaultCryptoList = config.defaultCryptos
+let treatedData = []
 
 const elements = {
   mainTable: document.body.querySelector('.main-table'),
   btnDecline: document.body.querySelector('#btn-decline-cookie'),
   btnAccept: document.body.querySelector('#btn-accept-cookie'),
+  modalActions: document.body.querySelector('#modal-for-action'),
   modalCookie: document.body.querySelector('#modal-for-init-cookie'),
   modalRePopCookie: document.body.querySelector('#modal-for-repop-cookie'),
+  modalAddNew: document.body.querySelector('#modal-add-new'),
 }
 
 //If cookie is defined
 //Means that the cookie is accepted by user to keep his save of crypto data
-//Use the editedCryptoTable to edit the list of crypto display
-if (typeof CookieFnc.getCookie('testForUserCookie') === 'string') {
+//Use the Cookie to edit the list of crypto display
+if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
+  //Hide Cookie modal
+  CookieFnc.agreeToCookie(elements)
+  //Get Cookie info
+  let checkCookie = JSON.parse(CookieFnc.getCookie('InfoCryptoUsername'))
 
-  let checkCookie = JSON.parse(CookieFnc.getCookie('testForUserCookie'))
-
+  //Check if cookie has the right type
   if (checkCookie !== '' && typeof checkCookie === 'object') {
-    console.log(checkCookie);
     let userCryptoList = checkCookie.listCrypto
 
-    let generatedData = CryptoFnc.createCryptoData(userCryptoList, returnedData)
-
-    CryptoFnc.construcTableWithData(generatedData)
+    CryptoFnc.createCryptoData(userCryptoList, treatedData)
+    CryptoFnc.construcTableWithData(treatedData)
   }
 
   //If cookie is undefined
   //let the defaultCryptoTable to display the data
-  //If the user accepted the cookie, initiate the data by setting the cookie with the editedData
+  //If the user accepted the cookie, save the data setting the cookie
 } else {
 
   if (localStorage.getItem('dataCrypto')) {
     //Get the data save to reuse it in html instead of redoing the logic data
     let retrievedData = JSON.parse(localStorage.getItem('dataCrypto'));
-
     //Delete the raw data and inject the html from object
     elements.mainTable.remove()
-    document.body.querySelector('.resume').insertAdjacentHTML('afterend', retrievedData.htmlGenerated)
+    //Update the DOM
+    document.body.querySelector('.action-content-add-new').insertAdjacentHTML('afterend', retrievedData.htmlGenerated)
 
   } else {
-
-    CryptoFnc.createCryptoData(config.defaultCryptos, dataDefaultCrypto)
-    let generatedData = CryptoFnc.construcTableWithData(dataDefaultCrypto)
+    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
+    CryptoFnc.construcTableWithData(treatedData)
 
     //Save in localstorage to avoid repeat object instanciation
     let dataToLocalStorage = {
-      htmlGenerated: elements.mainTable.outerHTML
+      RootListCrypto: dataDefaultCryptoList,
+      htmlGenerated: elements.mainTable.outerHTML,
+      generatedData: treatedData
     }
 
     localStorage.setItem('dataCrypto', JSON.stringify(dataToLocalStorage))
   }
 
-  //COOKIES
+  //ON DECLINE COOKIE
   CookieFnc.disagreeCookie(elements)
+  //ON ACCEPT COOKIE
   elements.btnAccept.addEventListener('click', (ev) => {
-    CookieFnc.saveUserInCookie(dataDefaultCrypto, 1)
+    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
+    CookieFnc.agreeToCookie(elements)
   })
-
-  //TODO - BTN ACTION ACCEPT COOKIE - THEN ADD CLASS TO MODAL COOKIE - CHECK IF COOKIE IS SET THEN HIDDEN CLASS TO MODAL COOKIE - LOGIC FOR COOKIE DATA TO TABLE EDITED CRYPTO - BTN ACTIONS TO EDIT&DELETE&NEW
-
 }
 
 //************* Front Behavior DOM actions - Treat Data *************//
@@ -86,15 +90,32 @@ for (let i = 0; i < listTrElements.length; i++) {
 
 //BTN DELETE
 document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) => {
-  if (modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
-    console.log(modal.dataset.idCrypto)
+  if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
+    let id = elements.modalActions.dataset.idCrypto
+    let selector = 'tr[data-id-crypto=' + id + ']'
+    let TrElement = elements.mainTable.querySelector(selector)
+
+    //IF COOKIE IS SET - UPDATE THE DATA
+    let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
+    if(cookieData) {
+
+      let listFromCookie = cookieData
+      if(listFromCookie.includes(id)) {
+        listFromCookie.splice(listFromCookie.indexOf(id), 1);
+        CookieFnc.saveUserInCookie(listFromCookie, 1)
+      }
+    }
+
+    //DELETE ELEMENT - HIDE MODAL
+    TrElement.remove()
+    elements.modalActions.style.display = 'none'
   }
 })
 
 //BTN ADD TO FAV
 document.body.querySelector('#btn-add-to-fav').addEventListener('click', (ev) => {
-  if (modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
-    console.log(modal.dataset.idCrypto)
+  if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
+    console.log(elements.modalActions.dataset.idCrypto)
   }
 })
 
@@ -102,9 +123,18 @@ document.body.querySelector('#btn-add-to-fav').addEventListener('click', (ev) =>
 document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
   elmt.addEventListener('click', (ev) => {
     ev.preventDefault()
-    if (modal.dataset.idCrypto && typeof modal.dataset.idCrypto === 'string') {
-      console.log(modal.dataset.idCrypto)
-    }
+    elements.modalAddNew.style.display = 'block'
   })
-
 })
+
+document.body.querySelectorAll('#btn-confirm-add-new').addEventListener('click', (ev) => {
+
+  //IF COOKIE IS SET - UPDATE THE DATA
+  let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
+  if(cookieData) {
+
+    CookieFnc.saveUserInCookie(cookieData, 1)
+
+  }
+})
+

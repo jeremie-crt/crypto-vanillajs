@@ -58,6 +58,10 @@
             scalable technologies.</p>
         </div>
 
+        <div class="action-content-add-new">
+          <button class="btn-add-new">ADD NEW CURRRENCY</button>
+        </div>
+
         <table class="main-table" style="text-align: center; width:100%; ">
           <thead>
           <th>Name</th>
@@ -120,7 +124,6 @@
   </section>
 
 
-
 </div>
 
 <footer>
@@ -153,7 +156,21 @@
     </div>
   </div>
 
+  <div class="modal-wrapper" id="modal-add-new">
+    <div class="modal-content">
+      <div class="content">
+        <span class="close-modal">X</span>
+        <h2 class="modal-title">ADD NEW CRYPTO</h2>
+        <p class="introduction">You can edit the list by adding a new currency with the abbreviation in the input. It'll be added with the information linked</p>
+        <div class="action-content delete">
+            <input type="text" id="input-add-new" placeholder="ex:LBTC" value="">
+            <button id="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- COOKIE MODALS -->
   <div class="modal-cookie" id="modal-for-init-cookie">
     <div class="modal-content-cookie">
       <div class="content">
@@ -189,6 +206,7 @@
       </div>
     </div>
   </div>
+  <!-- END COOKIE MODALS -->
 
 
 </footer>

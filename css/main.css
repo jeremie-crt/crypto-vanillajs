@@ -274,6 +274,8 @@ footer { margin-top: 50px; min-height: 69px;}
   padding: 8px;
 }
 
+.action-content-add-new { text-align: right; }
+
 /**************** MODAL BEHAVIOR ***********************/
 
 .modal-wrapper {
@@ -441,3 +443,5 @@ footer { margin-top: 50px; min-height: 69px;}
 .modal-cookie-repop img {
   width: 100%;
 }
+
+.modal-cookie.hide-for-set { display: none; }

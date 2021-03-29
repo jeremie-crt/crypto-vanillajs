@@ -26,11 +26,13 @@ export class Crypto {
   }
 
   /**
-   * Defines object Crypto
+   *
    * @param cryptoDataList
    * @param returnedData
+   * @returns {*}
    */
   static createCryptoData(cryptoDataList, returnedData) {
+
     for (const currency of cryptoDataList) {
       let data = new CryptoModel(currency)
       data.id = currency
@@ -45,5 +47,7 @@ export class Crypto {
 
       returnedData.push(data)
     }
+
+    return returnedData
   }
 }
