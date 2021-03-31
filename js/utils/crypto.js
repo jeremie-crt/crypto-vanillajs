@@ -6,8 +6,9 @@ export class Crypto {
   /**
    * Creates each table row with element data
    * @param dataCryptoToHtml
+   * @param cleanHtml
    */
-  static construcTableWithData(dataCryptoToHtml) {
+  static construcTableWithData(dataCryptoToHtml, cleanHtml = false) {
     let table = document.querySelector('.main-table'),
       tbody = document.createElement('tbody');
 

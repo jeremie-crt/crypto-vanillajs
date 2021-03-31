@@ -15,6 +15,7 @@ const elements = {
   mainTable: document.body.querySelector('.main-table'),
   btnDecline: document.body.querySelector('#btn-decline-cookie'),
   btnAccept: document.body.querySelector('#btn-accept-cookie'),
+  btnInputAddNew: document.body.querySelector('#input-add-new'),
   modalActions: document.body.querySelector('#modal-for-action'),
   modalCookie: document.body.querySelector('#modal-for-init-cookie'),
   modalRePopCookie: document.body.querySelector('#modal-for-repop-cookie'),
@@ -33,6 +34,9 @@ if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
   //Check if cookie has the right type
   if (checkCookie !== '' && typeof checkCookie === 'object') {
     let userCryptoList = checkCookie.listCrypto
+    dataDefaultCryptoList = userCryptoList
+    console.log(userCryptoList);
+    console.log('dataDefaultCryptoList', dataDefaultCryptoList);
 
     CryptoFnc.createCryptoData(userCryptoList, treatedData)
     CryptoFnc.construcTableWithData(treatedData)
@@ -52,17 +56,7 @@ if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
     document.body.querySelector('.action-content-add-new').insertAdjacentHTML('afterend', retrievedData.htmlGenerated)
 
   } else {
-    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
-    CryptoFnc.construcTableWithData(treatedData)
-
-    //Save in localstorage to avoid repeat object instanciation
-    let dataToLocalStorage = {
-      RootListCrypto: dataDefaultCryptoList,
-      htmlGenerated: elements.mainTable.outerHTML,
-      generatedData: treatedData
-    }
-
-    localStorage.setItem('dataCrypto', JSON.stringify(dataToLocalStorage))
+    saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
   }
 
   //ON DECLINE COOKIE
@@ -88,12 +82,13 @@ for (let i = 0; i < listTrElements.length; i++) {
   listTrElements[i].lastElementChild.insertAdjacentElement('afterend', btnToTr)
 }
 
-//BTN DELETE
+//------BTN DELETE
 document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) => {
+
   if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
     let id = elements.modalActions.dataset.idCrypto
-    let selector = 'tr[data-id-crypto=' + id + ']'
-    let TrElement = elements.mainTable.querySelector(selector)
+    let selector = 'tbody tr[data-id-crypto=' + id + ']'
+    let TrElement = document.body.querySelector(selector)
 
     //IF COOKIE IS SET - UPDATE THE DATA
     let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
@@ -104,6 +99,13 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
         listFromCookie.splice(listFromCookie.indexOf(id), 1);
         CookieFnc.saveUserInCookie(listFromCookie, 1)
       }
+    } else {
+      //LOCALSTORAGE
+      if(dataDefaultCryptoList.includes(id)) {
+        dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
+        console.log(dataDefaultCryptoList);
+        //TODO - DO THE SAVE DATA
+      }
     }
 
     //DELETE ELEMENT - HIDE MODAL
@@ -112,29 +114,56 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
   }
 })
 
-//BTN ADD TO FAV
+//------BTN ADD TO FAV
 document.body.querySelector('#btn-add-to-fav').addEventListener('click', (ev) => {
   if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
     console.log(elements.modalActions.dataset.idCrypto)
   }
 })
 
-//BTN ADD NEW
+//------BTN ADD NEW - BEHAVIOUR
 document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
   elmt.addEventListener('click', (ev) => {
     ev.preventDefault()
+
+    if(elements.modalActions.style.display === 'block') {
+      elements.modalActions.style.display = 'none'
+    }
     elements.modalAddNew.style.display = 'block'
   })
 })
 
-document.body.querySelectorAll('#btn-confirm-add-new').addEventListener('click', (ev) => {
+//ADD NEW DATA PROCESS
+document.body.querySelector('#btn-confirm-add-new').addEventListener('click', (ev) => {
+
+  let valueInput = elements.btnInputAddNew.value.toUpperCase().replace(/\s/g, '');
+
+  //Add the new currency to the default list
+  dataDefaultCryptoList.push(valueInput)
 
   //IF COOKIE IS SET - UPDATE THE DATA
   let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
   if(cookieData) {
+    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
 
-    CookieFnc.saveUserInCookie(cookieData, 1)
-
+  } else {
+    saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
   }
+
 })
 
+
+function saveDataForLocalStorage(dataDefaultCryptoList, treatedData) {
+
+  CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
+  CryptoFnc.construcTableWithData(treatedData)
+
+  //Save in localstorage to avoid repeat object instanciation
+  let dataToLocalStorage = {
+    RootListCrypto: dataDefaultCryptoList,
+    htmlGenerated: elements.mainTable.outerHTML,
+    generatedData: treatedData
+  }
+
+  localStorage.setItem('dataCrypto', JSON.stringify(dataToLocalStorage))
+}

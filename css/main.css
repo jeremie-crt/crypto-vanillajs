@@ -274,6 +274,11 @@ footer { margin-top: 50px; min-height: 69px;}
   padding: 8px;
 }
 
+.main-table {
+  text-align: center;
+  width:100%;
+}
+
 .action-content-add-new { text-align: right; }
 
 /**************** MODAL BEHAVIOR ***********************/
