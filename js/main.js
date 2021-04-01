@@ -8,7 +8,25 @@ import {Crypto as CryptoFnc} from "./utils/crypto.js";
 import {Cookie as CookieFnc} from "./utils/cookie.js";
 import {config} from "./config.crypto.js";
 
-let dataDefaultCryptoList = config.defaultCryptos
+let dataDefaultCryptoList
+let isCookieSet = false
+let isLocalStorageSet = false
+
+let cookieData = typeof CookieFnc.getCookieCryptoList() === 'object' ? CookieFnc.getCookieCryptoList() : '';
+
+if(cookieData) {
+  dataDefaultCryptoList = cookieData
+  isCookieSet = true
+
+} else if (localStorage.getItem('dataCrypto')) {
+  let retrievedData = JSON.parse(localStorage.getItem('dataCrypto'));
+  dataDefaultCryptoList = retrievedData.RootListCrypto
+  isLocalStorageSet = true
+
+} else {
+  dataDefaultCryptoList = config.defaultCryptos
+}
+
 let treatedData = []
 
 const elements = {
@@ -33,12 +51,7 @@ if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
 
   //Check if cookie has the right type
   if (checkCookie !== '' && typeof checkCookie === 'object') {
-    let userCryptoList = checkCookie.listCrypto
-    dataDefaultCryptoList = userCryptoList
-    console.log(userCryptoList);
-    console.log('dataDefaultCryptoList', dataDefaultCryptoList);
-
-    CryptoFnc.createCryptoData(userCryptoList, treatedData)
+    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
     CryptoFnc.construcTableWithData(treatedData)
   }
 
@@ -69,18 +82,7 @@ if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
 }
 
 //************* Front Behavior DOM actions - Treat Data *************//
-
-//ADD BUTTON AT THE END OF EACH TR
-let listTrElements = document.querySelectorAll('tr[data-id-crypto]')
-
-for (let i = 0; i < listTrElements.length; i++) {
-  let btnToTr = Object.assign(document.createElement('button'), {
-    className: 'btn-click-action',
-    textContent: 'ACTIONS'
-  })
-
-  listTrElements[i].lastElementChild.insertAdjacentElement('afterend', btnToTr)
-}
+addBtnActionToTR()
 
 //------BTN DELETE
 document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) => {
@@ -93,21 +95,19 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
     //IF COOKIE IS SET - UPDATE THE DATA
     let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
     if(cookieData) {
-
-      let listFromCookie = cookieData
-      if(listFromCookie.includes(id)) {
-        listFromCookie.splice(listFromCookie.indexOf(id), 1);
-        CookieFnc.saveUserInCookie(listFromCookie, 1)
+      if(dataDefaultCryptoList.includes(id)) {
+        dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
+        CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
       }
+
     } else {
       //LOCALSTORAGE
       if(dataDefaultCryptoList.includes(id)) {
         dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
-        console.log(dataDefaultCryptoList);
-        //TODO - DO THE SAVE DATA
+        treatedData = []
+        saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
       }
     }
-
     //DELETE ELEMENT - HIDE MODAL
     TrElement.remove()
     elements.modalActions.style.display = 'none'
@@ -137,7 +137,6 @@ document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
 document.body.querySelector('#btn-confirm-add-new').addEventListener('click', (ev) => {
 
   let valueInput = elements.btnInputAddNew.value.toUpperCase().replace(/\s/g, '');
-
   //Add the new currency to the default list
   dataDefaultCryptoList.push(valueInput)
 
@@ -145,25 +144,46 @@ document.body.querySelector('#btn-confirm-add-new').addEventListener('click', (e
   let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
   if(cookieData) {
     CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
-
+    elements.modalAddNew.style.display = 'none'
+    treatedData = []
+    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
+    CryptoFnc.construcTableWithData(treatedData)
+    addBtnActionToTR()
   } else {
+    treatedData = []
     saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
+    elements.modalAddNew.style.display = 'none'
   }
-
 })
 
+/*Function*/
 
 function saveDataForLocalStorage(dataDefaultCryptoList, treatedData) {
-
   CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
   CryptoFnc.construcTableWithData(treatedData)
-
   //Save in localstorage to avoid repeat object instanciation
   let dataToLocalStorage = {
     RootListCrypto: dataDefaultCryptoList,
-    htmlGenerated: elements.mainTable.outerHTML,
+    htmlGenerated: document.querySelector('.main-table').outerHTML,
     generatedData: treatedData
   }
 
   localStorage.setItem('dataCrypto', JSON.stringify(dataToLocalStorage))
 }
+
+//ADD BUTTON AT THE END OF EACH TR
+function addBtnActionToTR() {
+  let listTrElements = document.querySelectorAll('tr[data-id-crypto]')
+
+  for (let i = 0; i < listTrElements.length; i++) {
+    let btnToTr = Object.assign(document.createElement('button'), {
+      className: 'btn-click-action',
+      textContent: 'ACTIONS'
+    })
+
+    listTrElements[i].lastElementChild.insertAdjacentElement('afterend', btnToTr)
+  }
+}
+
+
+//TODO - Clean code - btn FOR DEFAULT DATA - Add Favorites list -

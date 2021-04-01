@@ -89,4 +89,19 @@ export class Cookie {
       }
     }
   }
+
+  static getCookieCryptoList() {
+    if (typeof this.getCookie('InfoCryptoUsername') === 'string') {
+      //Get Cookie info
+      let checkCookie = JSON.parse(this.getCookie('InfoCryptoUsername'))
+      //Check if cookie has the right type
+      if (checkCookie !== '' && typeof checkCookie === 'object') {
+
+        return checkCookie.listCrypto
+
+      } else {
+        return false
+      }
+    }
+  }
 }

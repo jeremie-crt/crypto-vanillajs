@@ -10,7 +10,8 @@ export class Crypto {
    */
   static construcTableWithData(dataCryptoToHtml, cleanHtml = false) {
     let table = document.querySelector('.main-table'),
-      tbody = document.createElement('tbody');
+      tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
 
     dataCryptoToHtml.map((elmt, index) => {
       let tr = document.createElement('tr')
@@ -22,7 +23,6 @@ export class Crypto {
       tbody.append(tr)
     })
 
-    table.querySelector('tbody').innerHTML = ''
     table.append(tbody)
   }
 
