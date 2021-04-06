@@ -8,18 +8,23 @@ export class Crypto {
    * @param dataCryptoToHtml
    * @param cleanHtml
    */
-  static construcTableWithData(dataCryptoToHtml, cleanHtml = false) {
+  static constructTableWithData(dataCryptoToHtml, cleanHtml = false) {
     let table = document.querySelector('.main-table'),
       tbody = table.querySelector('tbody');
       tbody.innerHTML = '';
 
     dataCryptoToHtml.map((elmt, index) => {
+      let indexPlus = parseInt(index) + 1
       let tr = document.createElement('tr')
+
+      let tdIndex = document.createElement('td')
+      tdIndex.append('#' + indexPlus)
+      tr.append(tdIndex)
 
       Funct.generateTD(tr, elmt.name, elmt.currentPrice, elmt.last24, elmt.last7d, elmt.marketCap, elmt.volume24)
 
       tr.dataset.idCrypto = elmt.id
-      tr.dataset.indexCrypto = index + 1
+      tr.dataset.indexCrypto = indexPlus
       tbody.append(tr)
     })
 
@@ -27,7 +32,7 @@ export class Crypto {
   }
 
   /**
-   *
+   * Create object for each value given from table parameter
    * @param cryptoDataList
    * @param returnedData
    * @returns {*}
@@ -37,14 +42,14 @@ export class Crypto {
     for (const currency of cryptoDataList) {
       let data = new CryptoModel(currency)
       data.id = currency
-      data.name = 'crypto: ' + currency
+      data.name = currency
       data.description = Funct.paragraph
       data.website = "https://google.com/" + currency
-      data.currentPrice = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
+      data.currentPrice = '$' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
       data.last24 = Funct.randomState(parseFloat(Math.random() * (100 - 1 + 1) + 1).toFixed(2));
       data.last7d = Funct.randomState(parseFloat(Math.random() * (100 - 1 + 1) + 1).toFixed(2));
-      data.marketCap = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
-      data.volume24 = '$ ' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
+      data.marketCap = '$' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
+      data.volume24 = '$' + Funct.commafy(Funct.randomNumber(0.3, 999999999999))
 
       returnedData.push(data)
     }

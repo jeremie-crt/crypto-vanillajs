@@ -22,8 +22,7 @@ export class Functions {
 
   //Create td data for several arguments given
   static generateTD(htmlTR, ...data) {
-
-    data.map((elmt) => {
+    data.map((elmt, index) => {
       let td = document.createElement('td')
       td.append(elmt)
 

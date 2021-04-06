@@ -1,6 +1,7 @@
 export class Cookie {
 
   /**
+   * Create the object with the data for the new cookie
    * @param dataDefaultCryptoList
    * @param duration
    */
@@ -17,7 +18,7 @@ export class Cookie {
   }
 
   /**
-   *
+   * Set a new cookie
    * @param nameC
    * @param valueC
    * @param expireC
@@ -31,6 +32,7 @@ export class Cookie {
   }
 
   /**
+   * Get the cookie in Window Object
    * regex SRC= "https://javascript.info/cookie"
    * @param name
    * @returns {string|undefined}
@@ -68,13 +70,21 @@ export class Cookie {
     })
   }
 
+  /**
+   * Hide the cookie modal agreement
+   * @param elements
+   */
   static agreeToCookie(elements) {
     //Hide Cookie modal
     elements.modalCookie.style.display = 'none'
     elements.modalCookie.classList.add('hide-for-set')
   }
 
-  static isSetCookie() {
+  /**
+   * Returns all data from the cookie
+   * @returns {boolean|any}
+   */
+  static getCookieData() {
     if (typeof this.getCookie('InfoCryptoUsername') === 'string') {
       //Get Cookie info
       let checkCookie = JSON.parse(this.getCookie('InfoCryptoUsername'))
@@ -82,7 +92,7 @@ export class Cookie {
       //Check if cookie has the right type
       if (checkCookie !== '' && typeof checkCookie === 'object') {
 
-        return checkCookie.listCrypto
+        return checkCookie
 
       } else {
         return false
@@ -90,18 +100,4 @@ export class Cookie {
     }
   }
 
-  static getCookieCryptoList() {
-    if (typeof this.getCookie('InfoCryptoUsername') === 'string') {
-      //Get Cookie info
-      let checkCookie = JSON.parse(this.getCookie('InfoCryptoUsername'))
-      //Check if cookie has the right type
-      if (checkCookie !== '' && typeof checkCookie === 'object') {
-
-        return checkCookie.listCrypto
-
-      } else {
-        return false
-      }
-    }
-  }
 }

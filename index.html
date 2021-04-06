@@ -6,6 +6,7 @@
   <title>Crypto Market JS</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4285f4">
 
   <meta property="og:title" content="">
   <meta property="og:type" content="">
@@ -18,107 +19,107 @@
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
 
   <script src="https://kit.fontawesome.com/aaafa646f8.js" crossorigin="anonymous"></script>
-  <meta name="theme-color" content="#4285f4">
 </head>
 
 <body>
-
-
-<div class="main">
-
-  <h1 class="title">Crypto Market JS</h1>
-  <div class="header">
-    <div class="div-info">
-      <h3 class="introduction">Uniquely transition leveraged markets with compelling e-business. Distinctively
-        facilitate 24/365 experiences via principle-centered core competencies. Seamlessly administrate cross-unit
-        applications without parallel synergy. Compellingly productivate end-to-end ideas before effective
-        web-readiness. Monotonectally leverage other's 24/7 channels without professional core competencies.
-        Efficiently facilitate diverse.</h3>
-    </div>
+<div class="header">
+  <div class="nav">
+    <h1 class="title">Crypto Market JS</h1>
   </div>
 
+  <div class="div-info">
+    <h3 class="introduction">Welcome on Crypto Market. This is a platform where you can have a detailed view on a list
+      of crypto currencies. It is an always up to date data that you can rely on with no doubt. Let's enjoy !</h3>
+  </div>
+</div>
+
+<div class="main">
   <section>
     <div class="container">
       <div class="content">
 
         <div class="resume">
-          <p>Synergistically benchmark orthogonal strategic theme areas with bricks-and-clicks intellectual capital.
-            Collaboratively foster interactive synergy without technically sound applications. Efficiently target
-            scalable technologies.</p>
-          <p>Synergistically benchmark orthogonal strategic theme areas with bricks-and-clicks intellectual capital.
-            Collaboratively foster interactive synergy without technically sound applications. Efficiently target
-            scalable technologies.</p>
-          <p>Synergistically benchmark orthogonal strategic theme areas with bricks-and-clicks intellectual capital.
-            Collaboratively foster interactive synergy without technically sound applications. Efficiently target
-            scalable technologies.</p>
-          <p>Synergistically benchmark orthogonal strategic theme areas with bricks-and-clicks intellectual capital.
-            Collaboratively foster interactive synergy without technically sound applications. Efficiently target
-            scalable technologies.</p>
+          <h3>F.A.Q</h3>
+          <p>How does is it works ?</p>
+          <p>
+            There is a default list set by our choice but don't be sad, you can edit it as you wish.</p>
+          <p>On each line, you can see a button which once clicked give you more info of the currency and a display of
+            button actions. You can edit, delete and even add a new one.</p>
+          <p>Be aware that if cookie is accepted, you'll get your edited list everytime you connect on Crypto Market.
+            Otherwise, we use the localstorage of your browser.</p>
+          <p>If you want to reset the list, you can reset everything by clicking on the reset button.</p>
+          <p>Now it's time to check the market !</p>
         </div>
 
         <div class="action-content-add-new">
-          <button class="btn-add-new">ADD NEW CURRRENCY</button>
+          <button class="btn-add-new">ADD NEW CURRENCY</button>
         </div>
 
-        <table class="main-table">
-          <thead>
-          <th>Name</th>
-          <th>Price</th>
-          <th>24 %</th>
-          <th>7d %</th>
-          <th>Market Cap</th>
-          <th>Volume 24h</th>
-          <th>CTA</th>
-          </thead>
+        <div class="container-content-table" style="overflow-x: auto;">
+          <table class="main-table">
+            <thead>
+            <th>#</th>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>24H %</th>
+            <th>7D %</th>
+            <th>MARKET CAP</th>
+            <th>VOLUME 24H</th>
+            <th>CTA</th>
+            </thead>
 
-          <tbody>
-          <tr>
-            <td>Bitcoin BTC</td>
-            <td>$58000</td>
-            <td>
+            <tbody>
+            <tr>
+              <td>#1</td>
+              <td>Bitcoin BTC</td>
+              <td>$58000</td>
+              <td>
                  <span style="color: #32CD32;">
                   <i class="fa fa-arrow-up"></i> 1.65%
                 </span>
-            </td>
-            <td>
+              </td>
+              <td>
                 <span style="color: #DC143C;">
                   <i class="fa fa-arrow-down"></i> 1.65%
                 </span>
-            </td>
-            <td>$1,475,623,213</td>
-            <td>
-              volume
-            </td>
-            <td>
-              <button>ACTIONS</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Etherum ETH</td>
-            <td>$1600</td>
-            <td>
+              </td>
+              <td>$1,475,623,213</td>
+              <td>
+                volume
+              </td>
+              <td>
+                <button>ACTIONS</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#2</td>
+              <td>Etherum ETH</td>
+              <td>$1600</td>
+              <td>
                  <span style="color: #32CD32;">
                   <i class="fa fa-arrow-up"></i> 4.35%
                 </span>
-            </td>
-            <td>
+              </td>
+              <td>
                 <span style="color: #32CD32;">
                   <i class="fa fa-arrow-up"></i> 2.14%
                 </span>
-            </td>
-            <td>$66,456,213</td>
-            <td>
-              volume
-            </td>
-            <td>
-              <button>ACTIONS</button>
-            </td>
-          </tr>
-          <tr>
-          </tbody>
-        </table>
+              </td>
+              <td>$66,456,213</td>
+              <td>
+                volume
+              </td>
+              <td>
+                <button>ACTIONS</button>
+              </td>
+            </tr>
+            <tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -127,18 +128,24 @@
 </div>
 
 <footer>
+  <div class="container">
+    <p class="copyright"></p>
+  </div>
+</footer>
 
-  <div class="modal-wrapper" id="modal-for-action">
-    <div class="modal-content">
-      <div class="content">
-        <span class="close-modal">X</span>
-        <h2 class="modal-title">CONTENT MODAL</h2>
-        <p class="introduction">Uniquely transition leveraged markets with compelling e-business. Distinctively
-          facilitate 24/365 experiences via principle-centered core competencies. Seamlessly administrate cross-unit
-          applications without parallel synergy. Compellingly productivate end-to-end ideas before effective
-          web-readiness. Monotonectally leverage other's 24/7 channels without professional core competencies.
-          Efficiently facilitate diverse.</p>
+<div class="modal-wrapper" id="modal-for-action">
+  <div class="modal-content">
+    <h2 class="modal-title">CONTENT MODAL</h2>
 
+    <div class="content">
+      <span class="close-modal">X</span>
+      <p class="introduction">Uniquely transition leveraged markets with compelling e-business. Distinctively
+        facilitate 24/365 experiences via principle-centered core competencies. Seamlessly administrate cross-unit
+        applications without parallel synergy. Compellingly productivate end-to-end ideas before effective
+        web-readiness. Monotonectally leverage other's 24/7 channels without professional core competencies.
+        Efficiently facilitate diverse.</p>
+
+      <div class="picker-inputs">
         <div class="action-content delete">
           <h3>Delete this one ?</h3>
           <button id="btn-del-crypto">DELETE</button>
@@ -151,66 +158,80 @@
           <h3>Add another currency ?</h3>
           <button class="btn-add-new">ADD NEW CURRRENCY</button>
         </div>
-
       </div>
     </div>
   </div>
+</div>
 
-  <div class="modal-wrapper" id="modal-add-new">
-    <div class="modal-content">
-      <div class="content">
-        <span class="close-modal">X</span>
-        <h2 class="modal-title">ADD NEW CRYPTO</h2>
-        <p class="introduction">You can edit the list by adding a new currency with the abbreviation in the input. It'll be added with the information linked</p>
+<div class="modal-wrapper" id="modal-add-new">
+  <div class="modal-content">
+    <h2 class="modal-title">ADD NEW CRYPTO</h2>
+
+    <div class="content">
+      <span class="close-modal">X</span>
+      <p class="introduction">You can edit the list by adding a new currency with the abbreviation in the input. It'll
+        be added with the information linked from the API CoinMarket.</p>
+
+      <div class="picker-inputs">
+        <div class="picker-inputs-content">
+          <p>Find one directly from this list of various crypto currencies on the market.</p>
+          <select name="" id="select-add-new">
+            <option value="">...</option>
+            <option value="SLX">SLX</option>
+            <option value="QTUM">QTUM</option>
+            <option value="SOL">SOL</option>
+          </select>
+          <button class="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+        </div>
+
+        <div class="picker-inputs-content">
+          <p>Type one directly and if it matches one existing on the market it'll be added.</p>
+          <input type="text" id="input-add-new" placeholder="ex:LBTC" value="">
+          <button class="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COOKIE MODALS -->
+<div class="modal-cookie" id="modal-for-init-cookie">
+  <div class="modal-content-cookie">
+    <h2 class="modal-title">COOKIE AGREEMENT</h2>
+    <div class="content">
+      <p class="introduction">The use of cookie is needed to plainfully enjoy the service of Crypto Market. There is absolutely no ads tracking set in our service or anything similar.
+      The use of it on Crypto Market is only to save your own list of crypto currencies edited by your own actions through the platform functions available.
+      It'll be saved for 30 days. Eeach time you edit your list the cookie lifetime will be refreshed.
+      You can fully trust the use of cookie on Crypto Market.</p>
+
+      <div class="row">
         <div class="action-content delete">
-            <input type="text" id="input-add-new" placeholder="ex:LBTC" value="">
-            <button id="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+          <button id="btn-accept-cookie">I TRUST YOU GUYS</button>
         </div>
+
+        <div class="action-content delete">
+          <button id="btn-decline-cookie">HUM LET ME THINK</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-cookie-repop" id="modal-for-repop-cookie">
+  <div class="modal-content-cookie-repop">
+    <div class="spinner"></div>
+    <div class="content">
+      <div class="action-content fa">
+        <i class="fas fa-external-link-alt"></i>
+      </div>
+      <div class="action-content img">
+        <img src="./img/cookie.jpg" alt="" style="width: 100%">
       </div>
     </div>
   </div>
-
-  <!-- COOKIE MODALS -->
-  <div class="modal-cookie" id="modal-for-init-cookie">
-    <div class="modal-content-cookie">
-      <div class="content">
-        <h2 class="modal-title">COOKIE AGREEMENT</h2>
-        <p class="introduction">Uniquely transition leveraged markets with compelling e-business. Distinctively
-          facilitate 24/365 experiences via principle-centered core competencies. Seamlessly administrate cross-unit
-          applications without parallel synergy..</p>
-
-        <div class="row">
-          <div class="action-content delete">
-            <button id="btn-accept-cookie">AGREE</button>
-          </div>
-
-          <div class="action-content delete">
-            <button id="btn-decline-cookie">DISAGREE</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-cookie-repop" id="modal-for-repop-cookie">
-    <div class="modal-content-cookie-repop">
-      <div class="spinner"></div>
-      <div class="content">
-        <div class="action-content fa">
-          <i class="fas fa-external-link-alt"></i>
-        </div>
-        <div class="action-content img">
-          <img src="./img/cookie.jpg" alt="" style="width: 100%">
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- END COOKIE MODALS -->
-
-
-</footer>
-
+</div>
+<!-- END COOKIE MODALS -->
 
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="js/plugins.js"></script>
@@ -219,17 +240,23 @@
 
 <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
 <script>
-/*  window.ga = function () {
-    ga.q.push(arguments)
-  };
-  ga.q = [];
-  ga.l = +new Date;
-  ga('create', 'UA-XXXXX-Y', 'auto');
-  ga('set', 'anonymizeIp', true);
-  ga('set', 'transport', 'beacon');
-  ga('send', 'pageview')*/
+  /*  window.ga = function () {
+      ga.q.push(arguments)
+    };
+    ga.q = [];
+    ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto');
+    ga('set', 'anonymizeIp', true);
+    ga('set', 'transport', 'beacon');
+    ga('send', 'pageview')*/
 </script>
 <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+<script>
+  let dateThisYear = (new Date()).getFullYear()
+  document.body.querySelector('.copyright').innerHTML = 'Copyright © ' + dateThisYear;
+</script>
+
 </body>
 
 </html>

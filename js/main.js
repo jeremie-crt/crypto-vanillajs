@@ -8,26 +8,27 @@ import {Crypto as CryptoFnc} from "./utils/crypto.js";
 import {Cookie as CookieFnc} from "./utils/cookie.js";
 import {config} from "./config.crypto.js";
 
-let dataDefaultCryptoList
-let isCookieSet = false
-let isLocalStorageSet = false
+let dataDefaultCryptoList;
+let isCookieSet = false;
+let isLocalStorageSet = false;
 
-let cookieData = typeof CookieFnc.getCookieCryptoList() === 'object' ? CookieFnc.getCookieCryptoList() : '';
+let cookieData = typeof CookieFnc.getCookieData() === 'object' ? CookieFnc.getCookieData() : '';
+let storageData;
 
-if(cookieData) {
-  dataDefaultCryptoList = cookieData
-  isCookieSet = true
+if (cookieData) {
+  dataDefaultCryptoList = cookieData.listCrypto;
+  isCookieSet = true;
 
 } else if (localStorage.getItem('dataCrypto')) {
-  let retrievedData = JSON.parse(localStorage.getItem('dataCrypto'));
-  dataDefaultCryptoList = retrievedData.RootListCrypto
-  isLocalStorageSet = true
+  storageData = JSON.parse(localStorage.getItem('dataCrypto'));
+  dataDefaultCryptoList = storageData.RootListCrypto;
+  isLocalStorageSet = true;
 
 } else {
-  dataDefaultCryptoList = config.defaultCryptos
+  dataDefaultCryptoList = config.defaultCryptos;
 }
 
-let treatedData = []
+let treatedData = [];
 
 const elements = {
   mainTable: document.body.querySelector('.main-table'),
@@ -38,79 +39,78 @@ const elements = {
   modalCookie: document.body.querySelector('#modal-for-init-cookie'),
   modalRePopCookie: document.body.querySelector('#modal-for-repop-cookie'),
   modalAddNew: document.body.querySelector('#modal-add-new'),
-}
+};
 
 //If cookie is defined
 //Means that the cookie is accepted by user to keep his save of crypto data
 //Use the Cookie to edit the list of crypto display
-if (typeof CookieFnc.getCookie('InfoCryptoUsername') === 'string') {
+if (isCookieSet) {
   //Hide Cookie modal
-  CookieFnc.agreeToCookie(elements)
-  //Get Cookie info
-  let checkCookie = JSON.parse(CookieFnc.getCookie('InfoCryptoUsername'))
+  CookieFnc.agreeToCookie(elements);
 
-  //Check if cookie has the right type
-  if (checkCookie !== '' && typeof checkCookie === 'object') {
-    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
-    CryptoFnc.construcTableWithData(treatedData)
-  }
+  CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData);
+  CryptoFnc.constructTableWithData(treatedData);
 
   //If cookie is undefined
   //let the defaultCryptoTable to display the data
   //If the user accepted the cookie, save the data setting the cookie
 } else {
 
-  if (localStorage.getItem('dataCrypto')) {
-    //Get the data save to reuse it in html instead of redoing the logic data
-    let retrievedData = JSON.parse(localStorage.getItem('dataCrypto'));
+  if (isLocalStorageSet) {
     //Delete the raw data and inject the html from object
-    elements.mainTable.remove()
+    elements.mainTable.remove();
     //Update the DOM
-    document.body.querySelector('.action-content-add-new').insertAdjacentHTML('afterend', retrievedData.htmlGenerated)
+    document.body.querySelector('.container-content-table').insertAdjacentHTML('afterbegin', storageData.htmlGenerated);
 
   } else {
-    saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
+    saveDataForLocalStorage(dataDefaultCryptoList, treatedData);
   }
 
   //ON DECLINE COOKIE
-  CookieFnc.disagreeCookie(elements)
+  CookieFnc.disagreeCookie(elements);
   //ON ACCEPT COOKIE
   elements.btnAccept.addEventListener('click', (ev) => {
-    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
-    CookieFnc.agreeToCookie(elements)
-  })
+    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30);
+    CookieFnc.agreeToCookie(elements);
+  });
 }
 
 //************* Front Behavior DOM actions - Treat Data *************//
-addBtnActionToTR()
+addBtnActionToTR();
 
 //------BTN DELETE
 document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) => {
+  let isConfirmed = confirm('Are you sure ?')
 
-  if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
-    let id = elements.modalActions.dataset.idCrypto
-    let selector = 'tbody tr[data-id-crypto=' + id + ']'
-    let TrElement = document.body.querySelector(selector)
+  if(isConfirmed) {
+    if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
+      let id = elements.modalActions.dataset.idCrypto;
+      let selector = 'tbody tr[data-id-crypto=' + id + ']';
+      let TrElement = document.body.querySelector(selector);
 
-    //IF COOKIE IS SET - UPDATE THE DATA
-    let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
-    if(cookieData) {
-      if(dataDefaultCryptoList.includes(id)) {
-        dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
-        CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
+      //DELETE ELEMENT - HIDE MODAL
+      TrElement.remove()
+
+      //IF COOKIE IS SET - UPDATE THE DATA
+      if (isCookieSet) {
+        if (dataDefaultCryptoList.includes(id)) {
+          dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
+          CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30)
+        }
+      } else {
+        //LOCALSTORAGE
+        if (dataDefaultCryptoList.includes(id)) {
+          dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
+          treatedData = []
+          saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
+          addBtnActionToTR();
+          //TODO - FIX DELETE ACTION BTN
+        }
       }
+      console.log(TrElement)
 
-    } else {
-      //LOCALSTORAGE
-      if(dataDefaultCryptoList.includes(id)) {
-        dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
-        treatedData = []
-        saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
-      }
+      elements.modalActions.style.display = 'none'
     }
-    //DELETE ELEMENT - HIDE MODAL
-    TrElement.remove()
-    elements.modalActions.style.display = 'none'
   }
 })
 
@@ -125,8 +125,7 @@ document.body.querySelector('#btn-add-to-fav').addEventListener('click', (ev) =>
 document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
   elmt.addEventListener('click', (ev) => {
     ev.preventDefault()
-
-    if(elements.modalActions.style.display === 'block') {
+    if (elements.modalActions.style.display === 'block') {
       elements.modalActions.style.display = 'none'
     }
     elements.modalAddNew.style.display = 'block'
@@ -134,34 +133,38 @@ document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
 })
 
 //ADD NEW DATA PROCESS
-document.body.querySelector('#btn-confirm-add-new').addEventListener('click', (ev) => {
+document.body.querySelectorAll('.btn-confirm-add-new').forEach(elmt => {
+  elmt.addEventListener('click', (ev) => {
+    console.log(ev)
+    console.log(ev.target)
+    //TODO - DO SELECT VALUE
 
-  let valueInput = elements.btnInputAddNew.value.toUpperCase().replace(/\s/g, '');
-  //Add the new currency to the default list
-  dataDefaultCryptoList.push(valueInput)
+    let valueInput = elements.btnInputAddNew.value.toUpperCase().replace(/\s/g, '');
+    //Add the new currency to the default list
+    dataDefaultCryptoList.push(valueInput)
 
-  //IF COOKIE IS SET - UPDATE THE DATA
-  let cookieData = typeof CookieFnc.isSetCookie() === 'object' ? CookieFnc.isSetCookie() : ''
-  if(cookieData) {
-    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 1)
-    elements.modalAddNew.style.display = 'none'
-    treatedData = []
-    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
-    CryptoFnc.construcTableWithData(treatedData)
-    addBtnActionToTR()
-  } else {
-    treatedData = []
-    saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
-    elements.modalAddNew.style.display = 'none'
-  }
+    //IF COOKIE IS SET - UPDATE THE DATA
+    if(isCookieSet) {
+      CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30)
+      elements.modalAddNew.style.display = 'none'
+      treatedData = []
+      CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
+      CryptoFnc.constructTableWithData(treatedData)
+      addBtnActionToTR()
+    } else {
+      treatedData = []
+      saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
+      elements.modalAddNew.style.display = 'none'
+    }
+  })
 })
 
 /*Function*/
-
 function saveDataForLocalStorage(dataDefaultCryptoList, treatedData) {
   CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
-  CryptoFnc.construcTableWithData(treatedData)
-  //Save in localstorage to avoid repeat object instanciation
+  CryptoFnc.constructTableWithData(treatedData)
+
+  //Save in localstorage to avoid repeat object instances
   let dataToLocalStorage = {
     RootListCrypto: dataDefaultCryptoList,
     htmlGenerated: document.querySelector('.main-table').outerHTML,
@@ -176,14 +179,15 @@ function addBtnActionToTR() {
   let listTrElements = document.querySelectorAll('tr[data-id-crypto]')
 
   for (let i = 0; i < listTrElements.length; i++) {
+    let tdElmt = document.createElement('td')
     let btnToTr = Object.assign(document.createElement('button'), {
       className: 'btn-click-action',
-      textContent: 'ACTIONS'
+      textContent: 'ACTIONS',
     })
 
-    listTrElements[i].lastElementChild.insertAdjacentElement('afterend', btnToTr)
+    tdElmt.append(btnToTr)
+    listTrElements[i].lastElementChild.insertAdjacentElement('afterend', tdElmt)
   }
 }
 
-
-//TODO - Clean code - btn FOR DEFAULT DATA - Add Favorites list -
+//TODO - CHECK DELETE -  btn FOR DEFAULT DATA - Add Favorites list -
