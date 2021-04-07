@@ -35,6 +35,7 @@ const elements = {
   btnDecline: document.body.querySelector('#btn-decline-cookie'),
   btnAccept: document.body.querySelector('#btn-accept-cookie'),
   btnInputAddNew: document.body.querySelector('#input-add-new'),
+  btnSelectAddNew: document.body.querySelector('#select-add-new'),
   modalActions: document.body.querySelector('#modal-for-action'),
   modalCookie: document.body.querySelector('#modal-for-init-cookie'),
   modalRePopCookie: document.body.querySelector('#modal-for-repop-cookie'),
@@ -84,10 +85,10 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
 
   if(isConfirmed) {
     if (elements.modalActions.dataset.idCrypto && typeof elements.modalActions.dataset.idCrypto === 'string') {
+
       let id = elements.modalActions.dataset.idCrypto;
       let selector = 'tbody tr[data-id-crypto=' + id + ']';
       let TrElement = document.body.querySelector(selector);
-
       //DELETE ELEMENT - HIDE MODAL
       TrElement.remove()
 
@@ -96,6 +97,11 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
         if (dataDefaultCryptoList.includes(id)) {
           dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
           CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30)
+          treatedData = []
+          CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData);
+          CryptoFnc.constructTableWithData(treatedData);
+          //Event for btn action in table tr
+          updateEventBtnActions(elements.modalActions)
         }
       } else {
         //LOCALSTORAGE
@@ -103,14 +109,31 @@ document.body.querySelector('#btn-del-crypto').addEventListener('click', (ev) =>
           dataDefaultCryptoList.splice(dataDefaultCryptoList.indexOf(id), 1);
           treatedData = []
           saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
-          addBtnActionToTR();
-          //TODO - FIX DELETE ACTION BTN
+          //Event for btn action in table tr
+          updateEventBtnActions(elements.modalActions)
         }
       }
-      console.log(TrElement)
-
       elements.modalActions.style.display = 'none'
     }
+  }
+})
+
+//------BTN RESET LIST
+document.body.querySelector('#btn-reset-list').addEventListener('click', (ev) => {
+  console.log(ev.target)
+  if (isCookieSet) {
+    CookieFnc.saveUserInCookie(config.defaultCryptos, 30)
+    treatedData = []
+    CryptoFnc.createCryptoData(config.defaultCryptos, treatedData);
+    CryptoFnc.constructTableWithData(treatedData);
+    //Event for btn action in table tr
+    updateEventBtnActions(elements.modalActions)
+  } else {
+    //LOCALSTORAGE
+    treatedData = []
+    saveDataForLocalStorage(config.defaultCryptos, treatedData)
+    //Event for btn action in table tr
+    updateEventBtnActions(elements.modalActions)
   }
 })
 
@@ -133,28 +156,28 @@ document.body.querySelectorAll('.btn-add-new').forEach(elmt => {
 })
 
 //ADD NEW DATA PROCESS
-document.body.querySelectorAll('.btn-confirm-add-new').forEach(elmt => {
+document.body.querySelectorAll('.btn-confirm-add-new-input').forEach(elmt => {
   elmt.addEventListener('click', (ev) => {
-    console.log(ev)
-    console.log(ev.target)
-    //TODO - DO SELECT VALUE
 
     let valueInput = elements.btnInputAddNew.value.toUpperCase().replace(/\s/g, '');
-    //Add the new currency to the default list
-    dataDefaultCryptoList.push(valueInput)
 
-    //IF COOKIE IS SET - UPDATE THE DATA
-    if(isCookieSet) {
-      CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30)
-      elements.modalAddNew.style.display = 'none'
-      treatedData = []
-      CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
-      CryptoFnc.constructTableWithData(treatedData)
-      addBtnActionToTR()
+    if(typeof valueInput === 'string' && valueInput.length >= 3) {
+      treatDataForAddNewAction(valueInput)
     } else {
-      treatedData = []
-      saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
-      elements.modalAddNew.style.display = 'none'
+      return document.body.querySelector('.error-on-confirm-add-new-input').innerHTML = 'Input confirmed with empty value. Please provide a correct value.'
+    }
+  })
+})
+
+document.body.querySelectorAll('.btn-confirm-add-new-select').forEach(elmt => {
+  elmt.addEventListener('click', (ev) => {
+
+    let valueSelect = elements.btnSelectAddNew.value.toUpperCase().replace(/\s/g, '');
+
+    if(typeof valueSelect === 'string' && valueSelect.length >= 3) {
+      treatDataForAddNewAction(valueSelect)
+    } else {
+      return document.body.querySelector('.error-on-confirm-add-new-select').innerHTML = 'Selection confirmed with empty value. Please provide a correct option.'
     }
   })
 })
@@ -190,4 +213,46 @@ function addBtnActionToTR() {
   }
 }
 
-//TODO - CHECK DELETE -  btn FOR DEFAULT DATA - Add Favorites list -
+//Event for btn action in table tr
+function btnClickAction(modalAction) {
+  document.body.querySelectorAll('.btn-click-action').forEach(elmt => {
+    elmt.addEventListener('click', ev => {
+      ev.preventDefault()
+      if(ev.target.parentNode.parentNode.dataset.idCrypto) {
+        modalAction.dataset.idCrypto = ev.target.parentNode.parentNode.dataset.idCrypto
+      }
+      modalAction.style.display = 'block'
+    })
+  })
+}
+
+function updateEventBtnActions(modalAction) {
+  addBtnActionToTR();
+  //Event for btn action in table tr
+  btnClickAction(modalAction)
+}
+
+function treatDataForAddNewAction(value) {
+  //Add the new currency to the default list
+  dataDefaultCryptoList.push(value)
+
+  //IF COOKIE IS SET - UPDATE THE DATA
+  if(isCookieSet) {
+    CookieFnc.saveUserInCookie(dataDefaultCryptoList, 30)
+    elements.modalAddNew.style.display = 'none'
+    treatedData = []
+    CryptoFnc.createCryptoData(dataDefaultCryptoList, treatedData)
+    CryptoFnc.constructTableWithData(treatedData)
+    //Event for btn action in table tr
+    updateEventBtnActions(elements.modalActions)
+
+  } else {
+    treatedData = []
+    saveDataForLocalStorage(dataDefaultCryptoList, treatedData)
+    elements.modalAddNew.style.display = 'none'
+    //Event for btn action in table tr
+    updateEventBtnActions(elements.modalActions)
+  }
+}
+
+//TODO - Add Favorites list -

@@ -58,8 +58,12 @@
           <button class="btn-add-new">ADD NEW CURRENCY</button>
         </div>
 
+        <div class="action-content-reset-list">
+          <button id="btn-reset-list">RESET LIST</button>
+        </div>
+
         <div class="container-content-table" style="overflow-x: auto;">
-          <table class="main-table">
+          <table class="main-table" id="main-table">
             <thead>
             <th>#</th>
             <th>NAME</th>
@@ -181,13 +185,17 @@
             <option value="QTUM">QTUM</option>
             <option value="SOL">SOL</option>
           </select>
-          <button class="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+          <button class="btn-confirm-add-new-select">CONFIRM THIS CHOICE</button>
+          <br>
+          <span class="error-on-confirm-add-new-select"></span>
         </div>
 
         <div class="picker-inputs-content">
           <p>Type one directly and if it matches one existing on the market it'll be added.</p>
           <input type="text" id="input-add-new" placeholder="ex:LBTC" value="">
-          <button class="btn-confirm-add-new">CONFIRM THIS CHOICE</button>
+          <button class="btn-confirm-add-new-input">CONFIRM THIS CHOICE</button>
+          <br>
+          <span class="error-on-confirm-add-new-input"></span>
         </div>
       </div>
     </div>

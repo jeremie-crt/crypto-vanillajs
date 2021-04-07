@@ -145,7 +145,7 @@ footer .container {
 }
 
 #modal-add-new select {
-  width: 30%;
+  width: 156px;
 }
 
 #modal-add-new .introduction {
@@ -407,4 +407,11 @@ footer .container {
   border-radius: 5px;
   padding: 4px 10px;
   font-size: 15px;
+}
+
+/**** error messages ****/
+.error-on-confirm-add-new-select,
+.error-on-confirm-add-new-input {
+  color: #dd0027;
+  font-size: 12px;
 }
