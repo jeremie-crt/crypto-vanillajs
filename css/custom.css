@@ -32,6 +32,55 @@ footer .container {
   text-shadow: 2px 4px 4px;
 }
 
+.menu-user-container {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  text-align: right;
+}
+
+.menu-user-container:hover ul {
+  display: block;
+  text-align: center;
+}
+
+.menu-user-container img {
+  width: 50px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.menu-user-container p {
+  margin: 0;
+}
+
+.menu-user-container ul {
+  display: none;
+  padding: 5px;
+  background-color: #2a60ffc7;
+  color: #f0f0f0;
+  margin: 6px;
+  z-index: 3;
+  border-radius: 5px;
+  border: 1px solid #ffbf80;
+}
+
+.menu-user-container ul li {
+  list-style-type: none;
+  margin-bottom: 4px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.menu-user-container ul li .show-fav-list {
+  text-decoration: none;
+  color: #f0f0f0;
+}
+
+.menu-user-container ul li:hover {
+  color: #ffffff;
+  text-shadow: 1px 1px 1px #b1b1b1;
+}
+
 .header .div-info {
   width: 60%;
   text-align: center;
@@ -84,7 +133,7 @@ footer .container {
 
 .btn-click-action, .btn-add-new { cursor: pointer; }
 
-.action-content-add-new { text-align: right; }
+.action-content-container { display: flex; justify-content: space-between; }
 
 @media screen and (max-width: 820px)  {
   .main-table {
@@ -407,6 +456,45 @@ footer .container {
   border-radius: 5px;
   padding: 4px 10px;
   font-size: 15px;
+}
+
+.btn-reset-list {
+  background-color: #ffffff;
+  color: #007eff;
+  border: 1px solid #007eff;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 15px;
+}
+.btn-reset-list:hover {
+  background-color: #007eff;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 15px;
+}
+
+#btn-delete-info {
+  background-color: #ffffff;
+  color: #e61919;
+  border: 1px solid #e61919;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 15px;
+}
+#btn-delete-info:hover {
+  background-color: #e61919;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 15px;
+}
+
+.current-time-info p {
+  margin: 0;
+  font-weight: bold;
 }
 
 /**** error messages ****/

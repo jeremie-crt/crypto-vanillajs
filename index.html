@@ -30,6 +30,16 @@
     <h1 class="title">Crypto Market JS</h1>
   </div>
 
+  <div class="menu-user-container">
+    <p><img src="img/bear.jpg" alt="bear"></p>
+    <ul>
+      <li>MY INFOS</li>
+      <li><a href="#" class="show-fav-list">MY FAVORITES</a></li>
+      <li><button class="btn-reset-list">RESET LIST</button></li>
+      <li><button id="btn-delete-info">DELETE MY INFO</button></li>
+    </ul>
+  </div>
+
   <div class="div-info">
     <h3 class="introduction">Welcome on Crypto Market. This is a platform where you can have a detailed view on a list
       of crypto currencies. It is an always up to date data that you can rely on with no doubt. Let's enjoy !</h3>
@@ -54,12 +64,19 @@
           <p>Now it's time to check the market !</p>
         </div>
 
-        <div class="action-content-add-new">
-          <button class="btn-add-new">ADD NEW CURRENCY</button>
-        </div>
-
-        <div class="action-content-reset-list">
-          <button id="btn-reset-list">RESET LIST</button>
+        <div class="action-content-container">
+          <div class="action-content-reset-list">
+            <button class="btn-reset-list">RESET LIST</button>
+          </div>
+          <div class="current-time-info">
+            <p>
+              <span class="date"></span>
+              <span class="datetime"></span>
+            </p>
+          </div>
+          <div class="action-content-add-new">
+            <button class="btn-add-new">ADD NEW CURRENCY</button>
+          </div>
         </div>
 
         <div class="container-content-table" style="overflow-x: auto;">
@@ -263,6 +280,15 @@
 <script>
   let dateThisYear = (new Date()).getFullYear()
   document.body.querySelector('.copyright').innerHTML = 'Copyright © ' + dateThisYear;
+</script>
+
+<script>
+  let date = new Date();
+  let dateYmD = date.getFullYear() + '/' + (date.getMonth() <= 9 ? ('0' + (date.getMonth() + 1)) : (date.getMonth() + 1)) + '/' + (date.getDay() <= 9 ? '0' + date.getDay() : date.getDay());
+  let dateTime = (date.getHours() <= 9 ? '0' + date.getHours() : date.getHours()) + ':' +  (date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes()) + ':' + (date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds());
+
+  document.body.querySelector('.current-time-info .date').innerHTML = dateYmD;
+  document.body.querySelector('.current-time-info .datetime').innerHTML = ' - ' + dateTime;
 </script>
 
 </body>
